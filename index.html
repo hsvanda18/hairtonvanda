@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Visitas 360° · Hairton Vanda</title>
+<meta name="description" content="Visitas virtuais 360° para coworkings, escritórios e espaços comerciais em Luanda. Demonstração interactiva e portfólio de Hairton Vanda.">
+<meta property="og:title" content="Visitas 360° · Hairton Vanda">
+<meta property="og:description" content="Mostre o seu espaço antes da primeira visita.">
+<meta property="og:image" content="assets/og.jpg">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one column; the live 360° demo is the hero, then offer, pilot, process, web portfolio, contact. */
+:root{
+  --bg:#f5f1ff; --card:#ffffff; --ink:#1a0b33; --muted:#5b5470; --line:#e4d9ff;
+  --brand:#6c2bd9; --on-brand:#ffffff; --lime:#c8f031; --on-lime:#1a0b33; --night:#1a0b33; --tint:#ede5ff;
+  --display:"Sora","Poppins",system-ui,sans-serif; --body:"DM Sans",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#120824;--card:#1e1038;--ink:#f5f1ff;--muted:#b9b0cf;--line:#3b2a5c;--brand:#a47bff;--on-brand:#1a0b33;--tint:#2a1650;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#120824;--card:#1e1038;--ink:#f5f1ff;--muted:#b9b0cf;--line:#3b2a5c;--brand:#a47bff;--on-brand:#1a0b33;--tint:#2a1650;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:28px 64px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:600}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--brand)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(32px,6vw,58px);line-height:1.02;letter-spacing:-.025em;margin:28px 0 12px;text-wrap:balance;max-width:16ch}
+h1 mark{background:linear-gradient(transparent 62%,var(--lime) 62%,var(--lime) 92%,transparent 92%);color:inherit}
+.lead{color:var(--muted);max-width:60ch;font-size:17.5px;margin:0}
+h2{font-family:var(--display);font-weight:800;font-size:clamp(24px,4vw,32px);letter-spacing:-.015em;margin:0 0 6px;text-wrap:balance}
+section{margin-top:64px}
+.sub{color:var(--muted);margin:0 0 20px;max-width:62ch}
+/* viewer */
+.viewer{position:relative;margin-top:28px;border-radius:22px;overflow:hidden;background:var(--night);aspect-ratio:16/9;min-height:360px;max-width:100%;touch-action:none;user-select:none;cursor:grab}
+.viewer.drag{cursor:grabbing}
+.viewer canvas{display:block;width:100%;height:100%}
+.vbar{position:absolute;left:12px;right:12px;bottom:12px;display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;pointer-events:none}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;pointer-events:auto}
+.tab{font:500 13px var(--body);border:0;border-radius:999px;padding:8px 14px;background:rgba(26,11,51,.72);color:#f5f1ff;cursor:pointer;backdrop-filter:blur(6px)}
+.tab[aria-pressed="true"]{background:#c8f031;color:#1a0b33}
+.vcta{pointer-events:auto;display:flex;gap:6px}
+.chip{font:500 12.5px var(--body);border-radius:999px;padding:8px 14px;background:rgba(26,11,51,.72);color:#f5f1ff;border:1px solid rgba(255,255,255,.18)}
+.hint{position:absolute;top:12px;left:12px;font-family:var(--mono);font-size:11.5px;color:#f5f1ff;background:rgba(26,11,51,.6);padding:6px 10px;border-radius:8px;transition:opacity .4s}
+.label{position:absolute;top:12px;right:12px;font-family:var(--display);font-weight:600;font-size:14px;color:#1a0b33;background:#c8f031;padding:6px 12px;border-radius:999px}
+.hot{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:8px;border:0;background:rgba(26,11,51,.82);color:#fff;font:600 13px var(--body);padding:8px 14px 8px 8px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.hot::before{content:"";width:22px;height:22px;border-radius:50%;background:#c8f031;box-shadow:0 0 0 6px rgba(200,240,49,.25);flex:none}
+.hot:focus-visible,.tab:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+.fade{position:absolute;inset:0;background:#1a0b33;opacity:0;pointer-events:none;transition:opacity .35s}
+.note{font-size:13.5px;color:var(--muted);margin-top:10px}
+[hidden]{display:none!important}
+.hot.edge{background:#c8f031;color:#1a0b33;padding:8px 14px}
+.hot.edge::before{display:none}
+.hint .short{display:none}
+@media (max-width:560px){.vcta{display:none}.hint .long{display:none}.hint .short{display:inline}.tab{padding:7px 11px;font-size:12.5px}.viewer{min-height:420px}}
+/* grids */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 16px;min-width:0}
+.card b{font-family:var(--display);font-weight:600;display:block;margin-bottom:4px}
+.card p{margin:0;color:var(--muted);font-size:14.5px}
+.ico{width:36px;height:36px;border-radius:10px;background:var(--tint);color:var(--brand);display:grid;place-items:center;margin-bottom:12px}
+.pilot{background:var(--night);color:#f5f1ff;border-radius:22px;padding:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;align-items:center}
+.pilot h2{color:#f5f1ff}.pilot .sub{color:#b794f6}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.steps li{display:flex;gap:12px;align-items:baseline;border-top:1px solid #3b2a5c;padding-top:10px}
+.steps span{font-family:var(--mono);color:#c8f031;font-size:13px;flex:none}
+.work{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.work figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.work img{display:block;width:100%;aspect-ratio:2/1;object-fit:cover;object-position:top}
+.work figcaption{padding:12px 14px;display:grid;grid-template-columns:1fr auto;column-gap:8px;align-items:baseline}.work figcaption span{grid-column:1/-1}.vs{font:600 13px var(--body);color:var(--brand);text-decoration:none;white-space:nowrap}.vs:hover{text-decoration:underline}.work figcaption b{font-family:var(--display);font-weight:600}.work figcaption span{display:block;font-size:13.5px;color:var(--muted)}
+.contact{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.cbtn{font:600 14px var(--body);border-radius:999px;padding:12px 18px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.cbtn.primary{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+.foot{margin-top:56px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><svg viewBox="0 0 120 120" width="34" height="34" aria-hidden="true"><rect width="120" height="120" rx="32" fill="#6c2bd9"/><g fill="none" stroke="#fff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"><path d="M27 34V86M51 34V86M27 60H51"/><path d="M63 34L76 86L89 34"/></g><circle cx="99" cy="81" r="6.5" fill="#c8f031"/></svg>Hairton Vanda</div>
+    <span class="eyebrow">UX design · front-end · Luanda</span>
+  </div>
+
+  <div class="eyebrow" style="margin-top:36px">visitas virtuais 360° para espaços comerciais</div>
+  <h1>Mostre o seu espaço antes da <mark>primeira visita</mark>.</h1>
+  <p class="lead">Coworking, salas e escritórios visitados pelo telemóvel, ao ritmo de quem procura. Experimente abaixo: arraste para olhar à volta e toque nos pontos para mudar de espaço.</p>
+
+  <div class="viewer" id="viewer" aria-label="Demonstração de visita virtual 360° a um business center fictício">
+    <div class="hint" id="hint"><span class="long">arraste para olhar · roda/pinça para zoom</span><span class="short">arraste para olhar</span></div>
+    <div class="label" id="roomLabel">Receção</div>
+    <div id="hots"></div>
+    <div class="fade" id="fade"></div>
+    <div class="vbar">
+      <div class="tabs" role="group" aria-label="Espaços">
+        <button class="tab" data-room="rececao" aria-pressed="true">Receção</button>
+        <button class="tab" data-room="cowork" aria-pressed="false">Coworking</button>
+        <button class="tab" data-room="reuniao" aria-pressed="false">Sala de reuniões</button>
+      </div>
+      <div class="vcta"><span class="chip">Marcar visita</span><span class="chip">WhatsApp</span></div>
+    </div>
+  </div>
+  <p class="note">Demonstração com um espaço fictício modelado em 3D. Num projecto real, cada espaço é fotografado em 360° e a visita fica fotorrealista, com o seu logótipo, botões e contactos.</p>
+
+  <section>
+    <h2>O que inclui</h2>
+    <p class="sub">Uma visita pronta a partilhar no site, no Instagram e no WhatsApp.</p>
+    <div class="grid">
+      <div class="card"><div class="ico" aria-hidden="true">◎</div><b>Fotografia 360°</b><p>Coworking, salas, receção e áreas comuns, com navegação entre espaços.</p></div>
+      <div class="card"><div class="ico" aria-hidden="true">↗</div><b>Botões de acção</b><p>Marcar visita, WhatsApp, site e redes sociais dentro da própria visita.</p></div>
+      <div class="card"><div class="ico" aria-hidden="true">▢</div><b>Telemóvel e computador</b><p>Abre num link, sem instalar nada. Também pode ficar dentro do seu site.</p></div>
+      <div class="card"><div class="ico" aria-hidden="true">✎</div><b>Actualização do site (opcional)</b><p>Página com pedido de visita, contacto directo e a visita 360° integrada.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="pilot">
+      <div>
+        <div class="eyebrow" style="color:#c8f031">piloto</div>
+        <h2>Comece com 1 a 3 espaços</h2>
+        <p class="sub" style="margin:0">Escolhe os espaços, vê o resultado e só depois decide se avança para o resto do edifício. O orçamento depende do número de espaços.</p>
+      </div>
+      <ol class="steps">
+        <li><span>01</span>Demonstração de 15 minutos, no seu espaço ou por videochamada</li>
+        <li><span>02</span>Sessão de fotografia 360° dos espaços escolhidos</li>
+        <li><span>03</span>Montagem da visita, com botões e a sua marca</li>
+        <li><span>04</span>Link pronto a partilhar e, se quiser, integração no site</li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h2>Sites que já desenhei e desenvolvi</h2>
+    <p class="sub">A visita 360° funciona melhor dentro de um site que converte. Alguns projectos recentes:</p>
+    <div class="work">
+      <figure><img loading="lazy" alt="Página inicial do site da Farwell" src="assets/farwell.jpg"><figcaption><b>Farwell</b><span>Distribuição farmacêutica · site institucional</span></figcaption></figure>
+      <figure><img loading="lazy" alt="Página inicial do site do Hotel Rainha Njinga" src="assets/hotel-rainha-njinga.jpg"><figcaption><b>Hotel Rainha Njinga</b><a class="vs" href="http://hotelrainhanjinga.com">Ver site ↗</a><span>Hotelaria · site com quartos e reservas</span></figcaption></figure>
+      <figure><img loading="lazy" alt="Página inicial do site da Alpiconstrói" src="assets/alpiconstroi.jpg"><figcaption><b>Alpiconstrói</b><a class="vs" href="https://www.alpiconstroi.com/">Ver site ↗</a><span>Construção civil · site bilingue</span></figcaption></figure>
+      <figure><img loading="lazy" alt="Página inicial do site da Royalseed Agro" src="assets/royalseed.jpg"><figcaption><b>Royalseed Agro</b><a class="vs" href="https://www.royalseedagro.com/">Ver site ↗</a><span>Agronegócio · site institucional</span></figcaption></figure>
+      <figure><img loading="lazy" alt="Página inicial da landing page da CargoFree" src="assets/cargofree.jpg"><figcaption><b>CargoFree</b><a class="vs" href="https://cargofree.vercel.app">Ver site ↗</a><span>Logística · landing page</span></figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>Vamos marcar a demonstração?</h2>
+    <p class="sub">Diga-me que espaços quer mostrar primeiro e combinamos o dia.</p>
+    <div class="contact">
+      <button class="cbtn primary" type="button" data-copy="+244 950 562 303">+244 950 562 303 · copiar</button>
+      <button class="cbtn" type="button" data-copy="hsvanda18@gmail.com">hsvanda18@gmail.com · copiar</button>
+      <a class="cbtn" href="https://www.instagram.com/hairtonvanda/">Instagram @hairtonvanda</a>
+    </div>
+  </section>
+  <div class="foot">Hairton Vanda · UX designer e front-end · Luanda</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+const el=document.getElementById('viewer');
+if(!window.THREE){el.insertAdjacentHTML('beforeend','<p style="color:#fff;padding:24px">Não foi possível carregar a demonstração 3D.</p>');return;}
+const R=new THREE.WebGLRenderer({antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));
+el.prepend(R.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color('#1a0b33');
+const cam=new THREE.PerspectiveCamera(72,1,0.05,100);cam.rotation.order='YXZ';cam.position.set(0,1.6,0);
+const M=(c,o={})=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.85,metalness:0},o));
+function tex(draw,w=512,h=256){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.anisotropy=4;return t}
+function sign(text,bg,fg,w=512,h=128,font='700 56px Sora, sans-serif'){return tex((g,W,H)=>{g.fillStyle=bg;g.fillRect(0,0,W,H);g.fillStyle=fg;g.font=font;g.textAlign='center';g.textBaseline='middle';g.fillText(text,W/2,H/2)},w,h)}
+const wood=tex((g,W,H)=>{g.fillStyle='#9a7350';g.fillRect(0,0,W,H);for(let i=0;i<16;i++){g.fillStyle=i%2?'#8d6847':'#a57d58';g.fillRect(0,i*H/16,W,H/16-1)}},256,256);wood.wrapS=wood.wrapT=THREE.RepeatWrapping;wood.repeat.set(3,3);
+const city=tex((g,W,H)=>{const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#8cc4ec');gr.addColorStop(1,'#e8f2fa');g.fillStyle=gr;g.fillRect(0,0,W,H);for(let i=0;i<22;i++){const x=i*W/22,bh=H*(.25+Math.random()*.45);g.fillStyle=['#6f8aa3','#57718b','#8aa1b6'][i%3];g.fillRect(x,H-bh,W/22-3,bh);g.fillStyle='rgba(255,255,255,.35)';for(let y=H-bh+8;y<H-6;y+=12)g.fillRect(x+4,y,W/22-11,4)}},1024,256);
+function box(w,h,d,mat,x,y,z,parent){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);parent.add(m);return m}
+function room(W,D,H,wallC){const g=new THREE.Group();
+ const floor=new THREE.Mesh(new THREE.PlaneGeometry(W,D),M('#ffffff',{map:wood}));floor.rotation.x=-Math.PI/2;g.add(floor);
+ const ceil=new THREE.Mesh(new THREE.PlaneGeometry(W,D),M('#f4f2ee'));ceil.rotation.x=Math.PI/2;ceil.position.y=H;g.add(ceil);
+ const wm=M(wallC,{side:THREE.DoubleSide});
+ [[0,H/2,-D/2,0,W],[0,H/2,D/2,Math.PI,W],[-W/2,H/2,0,Math.PI/2,D],[W/2,H/2,0,-Math.PI/2,D]].forEach(([x,y,z,r,w])=>{const p=new THREE.Mesh(new THREE.PlaneGeometry(w,H),wm);p.position.set(x,y,z);p.rotation.y=r;g.add(p)});
+ for(let i=-1;i<=1;i++){const l=box(1.2,.04,.2,M('#ffffff',{emissive:'#fff6e0',emissiveIntensity:1}),i*W/3.2,H-.03,0,g)}
+ g.add(new THREE.AmbientLight('#ffffff',.55));const pl=new THREE.PointLight('#fff1dc',.8,20);pl.position.set(0,H-.4,0);g.add(pl);const pl2=new THREE.PointLight('#ffffff',.4,14);pl2.position.set(W/3,H-.4,-D/3);g.add(pl2);
+ return g}
+function windowWall(g,W,D,H){const win=new THREE.Mesh(new THREE.PlaneGeometry(W*.8,H*.55),new THREE.MeshBasicMaterial({map:city}));win.position.set(0,H*.52,-D/2+.01);g.add(win);
+ const fr=M('#2b2b33');for(let i=0;i<=5;i++)box(.05,H*.55,.04,fr,-W*.4+i*W*.16,H*.52,-D/2+.03,g);box(W*.8,.05,.04,fr,0,H*.52,-D/2+.03,g)}
+function plant(g,x,z){box(.4,.45,.4,M('#e8e2d8'),x,.22,z,g);const s=new THREE.Mesh(new THREE.SphereGeometry(.38,16,12),M('#4f8a4a'));s.position.set(x,.85,z);g.add(s);const s2=new THREE.Mesh(new THREE.SphereGeometry(.28,16,12),M('#3f7a3c'));s2.position.set(x+.15,1.15,z-.05);g.add(s2)}
+function chair(g,x,z,ry=0,c='#2f2f3a'){const ch=new THREE.Group();box(.46,.06,.46,M(c),0,.46,0,ch);box(.46,.5,.06,M(c),0,.74,-.2,ch);box(.06,.44,.06,M('#777'),0,.22,0,ch);ch.position.set(x,0,z);ch.rotation.y=ry;g.add(ch)}
+const rooms={};
+// RECEÇÃO
+(function(){const W=8,D=8,H=3.2,g=room(W,D,H,'#ece6dc');
+ box(2.8,1.05,.7,M('#ffffff'),0,.52,-2.4,g);box(2.8,.6,.02,M('#6c2bd9'),0,.55,-2.04,g);box(3,.05,.8,M('#d9d2c6'),0,1.07,-2.4,g);
+ const lg=new THREE.Mesh(new THREE.PlaneGeometry(3.2,.8),new THREE.MeshBasicMaterial({map:sign('ESPAÇO DEMO · BUSINESS CENTER','#1a0b33','#f5f1ff',1024,256,'700 50px Sora, sans-serif')}));lg.position.set(0,2.3,-3.98);g.add(lg);
+ box(2.2,.45,.9,M('#5b4bd1'),-2.4,.3,1.8,g);box(2.2,.5,.2,M('#5b4bd1'),-2.4,.65,2.25,g);box(1,.4,.6,M('#c8f031'),-2.4,.2,.8,g);
+ plant(g,3.3,-3.3);plant(g,-3.3,-3.3);plant(g,3.3,3.2);
+ box(1.1,2.3,.05,M('#7a5a40'),3.98,1.15,0,g).rotation.y=Math.PI/2;box(1.1,2.3,.05,M('#7a5a40'),-3.98,1.15,-1,g).rotation.y=Math.PI/2;
+ rooms.rececao={g,name:'Receção',hots:[{p:[3.6,1.7,0],to:'cowork',t:'Coworking'},{p:[-3.6,1.7,-1],to:'reuniao',t:'Sala de reuniões'}],yaw:0}})();
+// COWORKING
+(function(){const W=11,D=9,H=3.2,g=room(W,D,H,'#f1eee8');windowWall(g,W,D,H);
+ for(let r=0;r<2;r++)for(let c=0;c<3;c++){const x=-3.2+c*3.2,z=-1.6+r*2.8;box(2.4,.05,1.2,M('#fafafa'),x,.75,z,g);box(.05,.72,1.1,M('#999'),x-1.1,.37,z,g);box(.05,.72,1.1,M('#999'),x+1.1,.37,z,g);
+  box(.6,.36,.03,M('#111',{emissive:'#2a2a60',emissiveIntensity:.6}),x-.55,1.02,z-.35,g);box(.6,.36,.03,M('#111',{emissive:'#2a2a60',emissiveIntensity:.6}),x+.55,1.02,z-.35,g);
+  chair(g,x-.55,z+.55,Math.PI,'#6c2bd9');chair(g,x+.55,z+.55,Math.PI,'#3a3a46')}
+ for(let i=0;i<3;i++){const lamp=new THREE.Mesh(new THREE.ConeGeometry(.35,.3,24,1,true),M('#1a0b33',{side:THREE.DoubleSide}));lamp.position.set(-3.2+i*3.2,2.45,-.2);g.add(lamp);const b=new THREE.Mesh(new THREE.SphereGeometry(.1,12,8),new THREE.MeshBasicMaterial({color:'#fff4cc'}));b.position.set(-3.2+i*3.2,2.32,-.2);g.add(b);box(.02,.7,.02,M('#222'),-3.2+i*3.2,2.85,-.2,g)}
+ const sg=new THREE.Mesh(new THREE.PlaneGeometry(2.4,.6),new THREE.MeshBasicMaterial({map:sign('COWORKING · 4.º PISO','#c8f031','#1a0b33')}));sg.position.set(-5.48,2.2,1.5);sg.rotation.y=Math.PI/2;g.add(sg);
+ plant(g,4.8,3.8);plant(g,-4.8,3.8);
+ rooms.cowork={g,name:'Coworking',hots:[{p:[0,1.7,4.2],to:'rececao',t:'Receção'},{p:[5.2,1.7,2.5],to:'reuniao',t:'Sala de reuniões'}],yaw:0}})();
+// REUNIÃO
+(function(){const W=7,D=7,H=3,g=room(W,D,H,'#e9e4ef');windowWall(g,W,D,H);
+ box(3.4,.06,1.4,M('#3b2a22'),0,.76,0,g);box(.1,.73,1,M('#222'),-1.3,.37,0,g);box(.1,.73,1,M('#222'),1.7,.37,0,g);
+ [-1.1,0,1.1].forEach(x=>{chair(g,x,-1,0,'#2f2f3a');chair(g,x,1,Math.PI,'#2f2f3a')});
+ const tv=new THREE.Mesh(new THREE.PlaneGeometry(2.2,1.25),new THREE.MeshBasicMaterial({map:sign('Reunião · 10h00','#1a0b33','#c8f031',768,436,'700 72px Sora, sans-serif')}));tv.position.set(3.48,1.6,0);tv.rotation.y=-Math.PI/2;g.add(tv);
+ const glass=new THREE.Mesh(new THREE.PlaneGeometry(4,2.6),new THREE.MeshStandardMaterial({color:'#bcd7e6',transparent:true,opacity:.25}));glass.position.set(0,1.7,3.48);glass.rotation.y=Math.PI;g.add(glass);
+ plant(g,-3,-3);
+ rooms.reuniao={g,name:'Sala de reuniões',hots:[{p:[0,1.7,3.2],to:'rececao',t:'Receção'},{p:[-3.2,1.7,1.5],to:'cowork',t:'Coworking'}],yaw:Math.PI}})();
+
+let cur=null,yaw=0,pitch=0,auto=true;const hotsEl=document.getElementById('hots');
+function show(id){if(cur)scene.remove(rooms[cur].g);cur=id;scene.add(rooms[id].g);yaw=rooms[id].yaw;pitch=0;
+ document.getElementById('roomLabel').textContent=rooms[id].name;
+ document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-pressed',b.dataset.room===id));
+ hotsEl.innerHTML='';rooms[id].hots.forEach(h=>{const b=document.createElement('button');b.className='hot';b.type='button';b.textContent=h.t;b._t=h.t;b.addEventListener('click',e=>{e.stopPropagation();go(h.to)});b._p=new THREE.Vector3(...h.p);hotsEl.appendChild(b)})}
+const fade=document.getElementById('fade');
+function go(id){if(id===cur)return;fade.style.opacity=1;setTimeout(()=>{show(id);fade.style.opacity=0},320)}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>go(b.dataset.room)));
+show('rececao');
+function size(){const w=el.clientWidth,h=el.clientHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
+new ResizeObserver(size).observe(el);size();
+let down=null,pinch=null;const pts=new Map();const hint=document.getElementById('hint');
+const dist=()=>{const [a,b]=[...pts.values()];return Math.hypot(a.x-b.x,a.y-b.y)};
+el.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});el.setPointerCapture(e.pointerId);auto=false;hint.style.opacity=0;
+ if(pts.size===2){down=null;pinch={d:dist(),fov:cam.fov}}else{down={x:e.clientX,y:e.clientY,yaw,pitch};el.classList.add('drag')}});
+el.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ if(pinch&&pts.size===2){cam.fov=Math.max(40,Math.min(85,pinch.fov*pinch.d/dist()));cam.updateProjectionMatrix();return}
+ if(!down)return;const k=cam.fov/el.clientHeight*Math.PI/180;yaw=down.yaw+(e.clientX-down.x)*k;pitch=Math.max(-1.2,Math.min(1.2,down.pitch+(e.clientY-down.y)*k))});
+const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pinch=null;if(pts.size===0){down=null;el.classList.remove('drag')}};el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);
+el.addEventListener('wheel',e=>{e.preventDefault();cam.fov=Math.max(40,Math.min(85,cam.fov+e.deltaY*.04));cam.updateProjectionMatrix()},{passive:false});
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;const v=new THREE.Vector3(),lp=new THREE.Vector3();
+(function loop(){requestAnimationFrame(loop);if(auto&&!reduce)yaw+=0.0012;cam.rotation.y=yaw;cam.rotation.x=pitch;R.render(scene,cam);
+ const w=el.clientWidth,h=el.clientHeight;let ei=0;hotsEl.querySelectorAll('.hot').forEach(b=>{v.copy(b._p).project(cam);const vis=v.z<1&&Math.abs(v.x)<.95&&Math.abs(v.y)<.9;
+ if(vis){b.classList.remove('edge');b.textContent=b._t;b.style.left=((v.x+1)/2*w)+'px';b.style.top=((1-v.y)/2*h)+'px'}
+ else{lp.copy(b._p).applyMatrix4(cam.matrixWorldInverse);const right=lp.x>0;b.classList.add('edge');b.textContent=right?b._t+' →':'← '+b._t;const bw=b.offsetWidth||120;
+  b.style.left=(right?w-bw/2-12:bw/2+12)+'px';b.style.top=(h*.42+(ei++)*44)+'px'}})})();
+})();
+document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if(!b)return;const t=b.dataset.copy,old=b.textContent;
+ navigator.clipboard.writeText(t).then(()=>{b.textContent='Copiado';setTimeout(()=>b.textContent=old,1400)}).catch(()=>{b.textContent=t})});
+</script>
+
+</body>
+</html>
